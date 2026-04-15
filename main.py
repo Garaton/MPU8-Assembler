@@ -16,19 +16,17 @@ if machineCode.lower() == 'y':
     immLength = len(immediateROM[0][0])
     instRom = []
     flagInstRom = []
-    immRom = []
-    flagImmRom = []
     # Parsing instructionROM and immediateROM, to get out non default instructions
     # if the instruciton is not default insert a instruction "struct" of parts, Address, Number, bit length
     for i in range(len(instructionROM)):
         if instructionROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
-            instRom.append([i*3, convertBinaryListToNumber(instructionROM[i][0], instLength), instLength])
+            instRom.append([i*4, convertBinaryListToNumber(instructionROM[i][0], instLength), instLength])
+            if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
+                instRom.append([i*4+3, convertBinaryListToNumber(immediateROM[i][0], immLength), immLength])
         if instructionROM[i][1] != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
-            flagInstRom.append([i*3, convertBinaryListToNumber(instructionROM[i][1], instLength), instLength])
-        if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
-            immRom.append([i, convertBinaryListToNumber(immediateROM[i][0], immLength), immLength])
-        if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
-            flagImmRom.append([i, convertBinaryListToNumber(immediateROM[i][1], immLength), immLength])
+            flagInstRom.append([i*4, convertBinaryListToNumber(instructionROM[i][1], instLength), instLength])
+            if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
+                flagInstRom.append([i*4+3, convertBinaryListToNumber(immediateROM[i][1], immLength), immLength])
     print(instRom)
     print(flagInstRom)
     print(immRom)

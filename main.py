@@ -29,9 +29,7 @@ if machineCode.lower() == 'y':
                 flagInstRom.append([i*4+3, convertBinaryListToNumber(immediateROM[i][1], immLength), immLength])
     print(instRom)
     print(flagInstRom)
-    print(immRom)
-    print(flagImmRom)
-    np.savez_compressed("mpu8MachineCode", instRom=instRom, flagInstRom=flagInstRom, immRom=immRom, flagImmRom=flagImmRom)
+    np.savez_compressed("mpu8MachineCode", instRom=instRom, flagInstRom=flagInstRom)
     exit() # We only wanted machine code
 
 # column checksums

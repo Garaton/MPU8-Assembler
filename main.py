@@ -1,6 +1,6 @@
 
 from assembler.assembler import assemble
-from assembler.fileParse import fetchRawMPU8Code
+from assembler.fileParse import fetchRawMPU8Code, convertBinaryListToNumber
 from schematicGenerator.machineCodeToSchematic import generateSchematics
 
 source = input("Input file name without extension: ")
@@ -8,6 +8,33 @@ source = input("Input file name without extension: ")
 rawCode = fetchRawMPU8Code(source)
 
 instructionROM, immediateROM = assemble(rawCode)
+
+machineCode = input("Do you only want machine code (y/n): ")
+if machineCode.lower() == 'y':
+    import numpy as np
+    instLength = len(instructionROM[0][0])
+    immLength = len(immediateROM[0][0])
+    instRom = []
+    flagInstRom = []
+    immRom = []
+    flagImmRom = []
+    # Parsing instructionROM and immediateROM, to get out non default instructions
+    # if the instruciton is not default insert a instruction "struct" of parts, Address, Number, bit length
+    for i in range(len(instructionROM)):
+        if instructionROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
+            instRom.append([i*instLength, convertBinaryListToNumber(instructionROM[i][0], instLength), instLength])
+        if instructionROM[i][1] != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
+            flagInstRom.append([i*instLength, convertBinaryListToNumber(instructionROM[i][1], instLength), instLength])
+        if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
+            immRom.append([i*immLength, convertBinaryListToNumber(immediateROM[i][0], immLength), immLength])
+        if immediateROM[i][0] != [0, 0, 0, 0, 0, 0, 0, 0]:
+            flagImmRom.append([i*immLength, convertBinaryListToNumber(immediateROM[i][1], immLength), immLength])
+    print(instRom)
+    print(flagInstRom)
+    print(immRom)
+    print(flagImmRom)
+    np.savez_compressed("mpu8MachineCode", instRom=instRom, flagInstRom=flagInstRom, immRom=immRom, flagImmRom=flagImmRom)
+    exit() # We only wanted machine code
 
 # column checksums
 nonFlagROMColumns = []

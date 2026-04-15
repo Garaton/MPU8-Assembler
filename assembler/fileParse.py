@@ -22,4 +22,10 @@ def fetchRawURCLCode(name: str) -> str:
     return answer
 
 
-
+def convertBinaryListToNumber(inst: list, instLength: int = 8) -> int:
+    result:int = 0
+    currentValue:int = 1 # we start at rightmost bit, (value = 1)
+    for i in range(instLength-1, -1, -1):
+        result+=currentValue*inst[i]
+        currentValue*=2
+    return result

@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# "machine code" for MPU8 files
+*.npz
+*.np
